@@ -1,6 +1,5 @@
 #include <stdio.h>
-extern int ft_strlen(char *str);
+extern size_t ft_strlen(char *str);
 int main()
 {
-	printf("Ret=%i", ft_strlen("hello"));
 }
