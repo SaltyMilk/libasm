@@ -31,13 +31,13 @@ retn
 
 is_after_in_str: ; returns 1 if character [rsi] appears later in rsi
 	xor rdx, rdx
-	add rdx, rcx
+;	add rdx, rcx
 	loop:
 		inc rdx
-		mov al, byte[rsi+rdx]		
-		cmp byte[rsi], al
+		mov bl, byte[rsi+rdx]		
+		cmp byte[rsi], bl
 		je isafter
-		cmp al, 0
+		cmp bl, 0
 		jne loop
 		mov rax, 0
 retn 
@@ -93,7 +93,7 @@ c_pos_str: 				;gives the pos of a char(al) in a str(rsi) or -1 if c isn't in st
 	mov rcx, -1
 	cloop:
 		inc rcx
-		cmp byte[rsi+rcx], al
+		cmp byte[rsi+rcx], dl 
 		je c_found
 		cmp byte[rsi+rcx], 0
 		jne cloop
@@ -103,19 +103,31 @@ c_found:
 retn
 
 str_base_to_int:
+	push rdi
+	mov rdi, rsi
 	call _ft_strlen
+	pop rdi
 	mov rbx, rax
 	xor rax, rax
-	mov rdx, -1
+	mov rcx, -1
 	bloop:
-	inc rdx
-		mov al, byte[rdi+rdx]
+		inc rcx
+		mov dl, byte[rdi+rcx]
+		cmp dl, 0
+		je bexit
+		push rcx
 		call c_pos_str
 		cmp rcx, -1
-		jne bloop
+		je bexit
+		push rdx
 		mul rbx 		; multiply rax by rbx
 		add rax, rcx
-		cmp al, 0
+		pop rdx
+		pop rcx
+		cmp dl, 0
+		jne bloop
+retn
+bexit:
 retn
 	
 
@@ -141,7 +153,7 @@ _ft_atoi_base:
 	div rcx 			;div rax by 2 to get remainder in rdx
 	pop rax
 	cmp rdx, 0
-	jne neg_result 
+	jne neg_result
 retn	
 neg_result:
 	neg rax
