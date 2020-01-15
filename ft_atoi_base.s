@@ -77,7 +77,6 @@ base_parse:
 		cmp rax, 0
 		je err_report
 		push rsi
-;		add rsi, rcx
 		call is_after_in_str		;No dupplicates
 		pop rsi
 		cmp rax, 1
@@ -90,6 +89,36 @@ err_report:
 	mov rax, 0
 retn
 
+c_pos_str: 				;gives the pos of a char(al) in a str(rsi) or -1 if c isn't in str
+	mov rcx, -1
+	cloop:
+		inc rcx
+		cmp byte[rsi+rcx], al
+		je c_found
+		cmp byte[rsi+rcx], 0
+		jne cloop
+	mov rcx, -1
+retn
+c_found:
+retn
+
+str_base_to_int:
+	call _ft_strlen
+	mov rbx, rax
+	xor rax, rax
+	mov rdx, -1
+	bloop:
+	inc rdx
+		mov al, byte[rdi+rdx]
+		call c_pos_str
+		cmp rcx, -1
+		jne bloop
+		mul rbx 		; multiply rax by rbx
+		add rax, rcx
+		cmp al, 0
+retn
+	
+
 _ft_atoi_base:
 	cmp rdi, 0
 	je err_nullptr
@@ -101,7 +130,26 @@ _ft_atoi_base:
 	dec rdi
 	call sign_handle
 	call base_parse
+	cmp rax, 0
+	je	exit 
+	push rbx				; save the n° '-' for later, we'll now use rbx to store base_str's length
+	call str_base_to_int	
+	pop rbx
+	push rax
+	mov rax, rbx
+	mov rcx, 2
+	div rcx 			;div rax by 2 to get remainder in rdx
+	pop rax
+	cmp rdx, 0
+	jne neg_result 
+retn	
+neg_result:
+	neg rax
 retn
+
+exit:
+retn
+
 err_nullptr:
 	mov rax, 0
 retn

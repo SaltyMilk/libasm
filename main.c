@@ -12,5 +12,5 @@ int main()
 {
 	char *s;
 	char a[] = "ok";
-	printf("%d\n", ft_atoi_base("","+231"));
+	printf("%d\n", ft_atoi_base("5","0123456789ABCDEF"));
 }
