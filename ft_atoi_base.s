@@ -140,10 +140,11 @@ _ft_atoi_base:
 	call skip_spaces
 	xor rbx, rbx		; used in sign_handle to count number of '-'
 	dec rdi
-	call sign_handle
 	call base_parse
 	cmp rax, 0
 	je	exit 
+	call sign_handle
+	mov rax, rbx
 	push rbx				; save the n° '-' for later, we'll now use rbx to store base_str's length
 	call str_base_to_int	
 	pop rbx

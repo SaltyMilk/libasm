@@ -17,8 +17,8 @@ int main()
 	printf("%d\n", ft_atoi_base(d,"0123456789ABCDEF"));
 	printf("%d\n", ft_atoi_base(a,"0123456789ABCDEF"));
 	printf("%d\n", ft_atoi_base("     ++-6","0123456789ABCDEF"));
-	printf("%d\n", ft_atoi_base("     -6","0123456789ABCDEF"));
+	printf("%d\n", ft_atoi_base("   	-6","0123456789ABCDEF"));
 	printf("%d\n", ft_atoi_base("","0123456789ABCDEF"));
-	printf("%d\n", ft_atoi_base("    --F","0123456789ABCDEF"));
+	printf("%d\n", ft_atoi_base("    ---F","0123456789ABCDEF"));
 	
 }
