@@ -25,14 +25,9 @@ _ft_list_sort:
 		mov rdi, [rdi]
 		push rax
 		call rax
-;		leave
-;		retn
 ;		mov rsi, rdx
-		cmp rax, 0 	;WTF IT GOES TO SWAP DATA WHEN RAX < 0, ==0 or RAX >0 WTFFF		;if (0 < cmp(rdi, rsi))
+		cmp eax, 0 			;if (0 < cmp(rdi, rsi)), use eax cause rax can't handle the sign WORKS TILL HERE
 		jg swap_data	
-mov rax, 42
-leave
-retn
 		pop rax
 		inc rcx
 		pop rdi
@@ -40,9 +35,6 @@ retn
 		pop rsi
 		jmp loop
 	swap_data:	
-mov rax, 32
-leave
-retn
 		pop rax
 		pop rdi
 		push rbx

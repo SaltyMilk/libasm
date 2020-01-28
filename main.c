@@ -23,7 +23,7 @@ extern int		ft_list_sort(t_list **begin, int (*cmp)());
 
 int ccmp(char *a, char *b)
 {
-	return ((*a)-(*b));
+	return ((*(unsigned char *)a)-(*(unsigned char *)b));
 }
 
 int main()
@@ -38,8 +38,8 @@ int main()
 	t_list **blst = &lst;
 	ft_list_push_front(blst, a);
 	ft_list_push_front(blst, c);
-	ft_list_push_front(blst, d);
 	ft_list_push_front(blst, b);
+	ft_list_push_front(blst, d);
 	printf("No seg before funct\n");
 	printf("%d\n", ft_list_sort(blst, &ccmp));
 	printf("No seg after funct\n");
