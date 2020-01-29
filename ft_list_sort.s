@@ -8,6 +8,8 @@ _ft_list_sort:
 	mov rbp, rsp
 	cmp rdi, 0
 	je ptr_protect
+	cmp rsi, 0
+	je ptr_protect
 	mov rax, rsi			; rax -> cmp()_ptr
 	mov rsi, rdi			; save a copy of the ptr to first elem 
 	loops:

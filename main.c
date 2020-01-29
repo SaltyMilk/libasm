@@ -20,13 +20,41 @@ extern int		ft_atoi_base(const char *str, const char *base);
 extern void		ft_list_push_front(t_list **begin_list, void *data);
 extern int		ft_list_size(t_list *begin_list);
 extern int		ft_list_sort(t_list **begin, int (*cmp)());
+extern int		ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 
-/* FT_LIST_SORT TEST
+
 int ccmp(char *a, char *b)
 {
 	return ((*(char *)a)-(*(char *)b));
 }
 
+int main()
+{
+	char a[] = "a";
+	char b[] = "b";
+	char c[] = "c";
+	char d[] = "d";
+	char e[] = "e";
+	char f[] = "f";
+	char g[] = "g";
+	t_list *lst = malloc(sizeof(t_list));
+	t_list **blst = &lst;
+	lst->data = b;
+	lst->next = NULL;
+	ft_list_push_front(blst, f);
+	ft_list_push_front(blst, a);
+	printf("No segf before function\n");
+	printf("%d\n", ft_list_remove_if(blst, a, ccmp, free));
+	printf("No segf after function\n");
+	t_list *tlst = lst;
+	while (tlst)
+	{
+		printf("[%c]", *(char *)(tlst->data));
+		tlst = tlst->next;
+	}
+	printf("\n");
+}
+/* FT_LIST_SORT TEST
 int main()
 {
 	char a[] = "a";
