@@ -24,26 +24,28 @@ _ft_list_sort:
 		push rdi
 		mov rdi, [rdi]
 		push rax
+		push rcx
 		call rax
-;		mov rsi, rdx
+		pop rcx
+		mov rsi, rdx
 		cmp eax, 0 			;if (0 < cmp(rdi, rsi)), use eax cause rax can't handle the sign WORKS TILL HERE
 		jg swap_data	
 		pop rax
 		inc rcx
 		pop rdi
-		mov rdi, rsi		;advance in the chained list 
+		mov rdi, rsi		;advance in the chained list
 		pop rsi
 		jmp loop
 	swap_data:	
 		pop rax
 		pop rdi
 		push rbx
-		push rcx
+		push rdx
 		mov rbx, [rdi]
 		mov rdx, [rsi]
 		mov [rdi], rdx
 		mov [rsi], rbx
-		pop rcx	
+		pop rdx	
 		pop rbx
 		pop rsi
 		jmp loops
