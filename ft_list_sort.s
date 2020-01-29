@@ -6,15 +6,11 @@ global _ft_list_sort
 _ft_list_sort:
 	push rbp
 	mov rbp, rsp
-	push rdi
-	mov rdi, [rdi]
-	call _ft_list_size
-	mov rbx, rax 			;rbx = lst_len
-	pop rdi
+	cmp rdi, 0
+	je ptr_protect
 	mov rax, rsi			; rax -> cmp()_ptr
 	mov rsi, rdi			; save a copy of the ptr to first elem 
 	loops:
-		xor rcx, rcx
 		mov rdi, [rsi]		; go back to the begining of the chained list
 		jmp loop
 	loopc:
@@ -24,14 +20,11 @@ _ft_list_sort:
 		push rdi
 		mov rdi, [rdi]
 		push rax
-		push rcx
 		call rax
-		pop rcx
 		mov rsi, rdx
 		cmp eax, 0 			;if (0 < cmp(rdi, rsi)), use eax cause rax can't handle the sign WORKS TILL HERE
 		jg swap_data	
 		pop rax
-		inc rcx
 		pop rdi
 		mov rdi, rsi		;advance in the chained list
 		pop rsi
@@ -39,18 +32,18 @@ _ft_list_sort:
 	swap_data:	
 		pop rax
 		pop rdi
-		push rbx
-		push rdx
 		mov rbx, [rdi]
-		mov rdx, [rsi]
-		mov [rdi], rdx
+		mov rcx, [rsi]
+		mov [rdi], rcx
 		mov [rsi], rbx
-		pop rdx	
-		pop rbx
 		pop rsi
 		jmp loops
 	loop:
-		cmp rcx, rbx
-		jb loopc			;jmp if rcx is below rbx
+		cmp QWORD[rdi+8], 0
+		jne loopc
 	leave
 retn
+ptr_protect:
+	leave
+retn
+

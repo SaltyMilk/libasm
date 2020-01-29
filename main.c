@@ -19,8 +19,9 @@ extern char		*ft_strdup(const char *str);
 extern int		ft_atoi_base(const char *str, const char *base);
 extern void		ft_list_push_front(t_list **begin_list, void *data);
 extern int		ft_list_size(t_list *begin_list);
-extern void		*ft_list_sort(t_list **begin, int (*cmp)());
+extern int		ft_list_sort(t_list **begin, int (*cmp)());
 
+/* FT_LIST_SORT TEST
 int ccmp(char *a, char *b)
 {
 	return ((*(char *)a)-(*(char *)b));
@@ -32,16 +33,22 @@ int main()
 	char b[] = "b";
 	char c[] = "c";
 	char d[] = "d";
+	char e[] = "e";
+	char f[] = "f";
+	char g[] = "g";
 	t_list *lst = malloc(sizeof(t_list));
 	lst->next = NULL;
 	lst->data = b;
 	t_list **blst = &lst;
-	ft_list_push_front(blst, a);
-	ft_list_push_front(blst, c);
-	ft_list_push_front(blst, b);
-	ft_list_push_front(blst, d);
+	ft_list_push_front(blst, g);
+//	ft_list_push_front(blst, f);
+//	ft_list_push_front(blst, a);
+//	ft_list_push_front(blst, c);
+//	ft_list_push_front(blst, b);
+//	ft_list_push_front(blst, d);
+	ft_list_push_front(blst, e);
 	printf("No seg before funct\n");
-	printf("%p\n", ft_list_sort(blst, &ccmp));
+	printf("%d\n", ft_list_sort(blst, &ccmp));
 	printf("%p\n", ((*blst)->next));
 	printf("No seg after funct\n");
 	t_list *tlst = lst;
@@ -53,7 +60,7 @@ int main()
 	printf("\n");
 }
 
-
+*/
 
 
 
