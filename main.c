@@ -22,6 +22,15 @@ extern int		ft_list_size(t_list *begin_list);
 extern int		ft_list_sort(t_list **begin, int (*cmp)());
 extern int		ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 
+
+
+int main()
+{
+	printf("%d\n", ft_atoi_base("10","011"));
+//	printf("%d\n", ft_atoi_base("-+\r++-+--ff\xff","0123456789abcdef"));
+//	printf("%d\n", ft_atoi_base("-01","01"));
+}
+/*
 void	ft_list_remove_i(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
 {
 	t_list	*remove;
@@ -45,14 +54,14 @@ void	ft_list_remove_i(t_list **begin_list, void *data_ref, int (*cmp)(), void (*
 		}
 		current = current->next;
 	}
-/*	printf("Val=[%s]\n", current->data);
+/	printf("Val=[%s]\n", current->data);
 	if ((*cmp)(current->next->data, data_ref) == 0)
 	{
 		printf("ok\n");
 		remove = current->next->next;
 		current->next->next = 0;
 		free(remove);
-	}*/
+	}/
 	current = *begin_list;
 	if (current && (*cmp)(current->data, data_ref) == 0)
 	{
@@ -99,7 +108,7 @@ int main()
 	}
 //free(clst);
 	printf("\n");
-}
+}*/
 /* FT_LIST_SORT TEST
 int main()
 {

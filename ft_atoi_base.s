@@ -24,7 +24,7 @@ sign_handle:
 	je rbxinc
 	cmp byte[rdi], 0x2b ; +
 	je sign_handle
-retn
+	retn
 	rbxinc:				;inc between cmp and je doesn't work
 		inc rbx			;so we do it here then jump back to work
 		jmp sign_handle 
@@ -32,13 +32,17 @@ retn
 is_after_in_str: ; returns 1 if character [rsi] appears later in rsi
 	xor rdx, rdx
 ;	add rdx, rcx
+	mov rdx, rcx
 	loop:
 		inc rdx
-		mov bl, byte[rsi+rdx]		
-		cmp byte[rsi], bl
+		mov bl, byte[rsi+rdx]
+		cmp bl, 0
+		je end
+		cmp byte[rsi+rcx], bl
 		je isafter
 		cmp bl, 0
 		jne loop
+	end:
 		mov rax, 0
 retn 
 	isafter:
@@ -77,7 +81,9 @@ base_parse:
 		cmp rax, 0
 		je err_report
 		push rsi
+		push rcx
 		call is_after_in_str		;No dupplicates
+		pop rcx
 		pop rsi
 		cmp rax, 1
 		je err_report
@@ -118,7 +124,7 @@ str_base_to_int:
 		push rcx
 		call c_pos_str
 		cmp rcx, -1
-		je bexit
+		je cexit
 		push rdx
 		mul rbx 		; multiply rax by rbx
 		add rax, rcx
@@ -129,6 +135,9 @@ str_base_to_int:
 retn
 bexit:
 retn
+cexit:
+ pop rcx
+retn
 	
 
 _ft_atoi_base:
@@ -136,21 +145,25 @@ _ft_atoi_base:
 	je err_nullptr
 	cmp rsi, 0
 	je err_nullptr
+	mov rax, [rdi]
 	dec rdi				; because we inc at the begining of loop
 	call skip_spaces
 	xor rbx, rbx		; used in sign_handle to count number of '-'
 	dec rdi
 	call base_parse
 	cmp rax, 0
-	je	exit 
+	je	exit
 	call sign_handle
 	mov rax, rbx
 	push rbx				; save the n° '-' for later, we'll now use rbx to store base_str's length
 	call str_base_to_int	
 	pop rbx
+	cmp rax, 0
+	je exit
 	push rax
 	mov rax, rbx
 	mov rcx, 2
+	xor rdx, rdx
 	div rcx 			;div rax by 2 to get remainder in rdx
 	pop rax
 	cmp rdx, 0
