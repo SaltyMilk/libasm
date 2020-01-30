@@ -22,6 +22,44 @@ extern int		ft_list_size(t_list *begin_list);
 extern int		ft_list_sort(t_list **begin, int (*cmp)());
 extern int		ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 
+void	ft_list_remove_i(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
+{
+	t_list	*remove;
+	t_list	*current;
+	
+	current = *begin_list;
+	while (current && current->next)
+	{
+	if (current->next->next && !current->next->next->next && (*cmp)(current->next->next->data, data_ref) == 0)
+		{
+		printf("%s\n", current->data);
+		remove = current->next->next;
+		current->next->next = 0;
+		free(remove);
+		}
+		if ((*cmp)(current->next->data, data_ref) == 0)
+		{
+			remove = current->next;
+			current->next = current->next->next;
+			free(remove);
+		}
+		current = current->next;
+	}
+/*	printf("Val=[%s]\n", current->data);
+	if ((*cmp)(current->next->data, data_ref) == 0)
+	{
+		printf("ok\n");
+		remove = current->next->next;
+		current->next->next = 0;
+		free(remove);
+	}*/
+	current = *begin_list;
+	if (current && (*cmp)(current->data, data_ref) == 0)
+	{
+		*begin_list = current->next;
+		free(current);
+	}
+}
 
 int ccmp(char *a, char *b)
 {
@@ -37,21 +75,29 @@ int main()
 	char e[] = "e";
 	char f[] = "f";
 	char g[] = "g";
+	int ret = 0;
 	t_list *lst = malloc(sizeof(t_list));
 	t_list **blst = &lst;
-	lst->data = b;
+	t_list *clst = *blst;
+	lst->data = c;
 	lst->next = NULL;
-	ft_list_push_front(blst, f);
+	ft_list_push_front(blst, b);
 	ft_list_push_front(blst, a);
+	ft_list_push_front(blst, f);
 	printf("No segf before function\n");
-	printf("%d\n", ft_list_remove_if(blst, a, ccmp, free));
+	printf("%c\n", ft_list_remove_if(blst, f, &ccmp, &free));//));
+//	printf("%d\n", ret);
 	printf("No segf after function\n");
-	t_list *tlst = lst;
+	t_list *tlst = *blst;
+	t_list *rlst;
 	while (tlst)
 	{
 		printf("[%c]", *(char *)(tlst->data));
+		rlst = tlst;
+		free(rlst);
 		tlst = tlst->next;
 	}
+//free(clst);
 	printf("\n");
 }
 /* FT_LIST_SORT TEST

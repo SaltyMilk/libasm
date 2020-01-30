@@ -30,19 +30,35 @@ _ft_list_remove_if:
 	call null_ptrs
 	cmp rax, 1
 	je ptr_protect		; exit function if one ptr is null
-	mov rdi, [rdi]
+	mov rdi, [rdi]		; rdi = *begin_list
 	jmp loop
 	loopc:
 		push rdi
+		mov rcx, [rdi+8]
+		mov rcx, [rcx+8] ;rcx = rdi->next->next
+		cmp rcx, 0
+		je check_elem
+		cmp QWORD[rcx+8], 0
+		jne check_elem
+		mov rdi, [rcx] ;rdi = rcx->data
+		call [rbp-8]
+		pop rdi
+		cmp rax, 0
+		je rm_last
+check_elem:
+		push rdi
+		mov rdi, [rdi+8]
 		mov rdi, [rdi]
 		call [rbp-8]
 		pop rdi
 		cmp rax, 0
 		je  remove_elem
+	btw:
 		mov rdi, [rdi+8]
 	loop:
 		cmp QWORD[rdi+8], 0
 		jne loopc
+	push rdi
 	mov rdi, [rbp-24]	;Go back to first elem
 	mov rdi, [rdi]		; rdi = *begin_list
 	push rdi
@@ -51,28 +67,50 @@ _ft_list_remove_if:
 	pop rdi
 	cmp rax, 0
 	je rm_first
+	end:
 	add rsp, 24
 	leave
 retn
 
+rm_last:
+	mov rbx, [rdi+8]
+	mov QWORD[rbx+8], 0
+	push rdi
+	push rsi
+	mov rdi, [rbx+8]
+	call [rbp-16]
+	pop rsi
+	pop rdi
+	jmp check_elem
+;retn
+
+
 rm_first:
 	mov rbx, rdi
 	mov rdi, [rdi+8]
+	mov rcx, [rbp-24]
+	mov [rcx], rdi
 	push rdi
 	mov rdi, rbx
+	push rsi
 	call [rbp-16]
+	pop rsi
 	pop rdi
-retn
+	jmp end
+;retn
 
 remove_elem:
 	mov rdx, [rdi+8]	 ; rdi->next
 	mov rbx, [rdx+8]	 ; rdi->next->next
 	mov [rdi+8], rbx
 	push rdi
-	mov rdi, [rdi+8]
+	mov rdi, rdx
+	push rsi			;FREE MODIFIES RSI
 	call [rbp-16]		;free rdx (next)
+	pop rsi
 	pop rdi
-retn
+	jmp btw
+;retn					had to be replaced by 'jmp btw', wtf ?
 
 ptr_protect:
 	add rsp, 24
